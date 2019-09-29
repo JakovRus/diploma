@@ -1,9 +1,16 @@
-from idautils import *
-from idc import *
-from functions_utils import *
+import idc
+import functions_utils
 
-addresses = get_user_functions()
 
-for address in addresses:
-    if is_user_function(address):
-        print GetFunctionName(address)
+def print_functions():
+    idc.auto_wait()
+
+    addresses = functions_utils.get_user_functions()
+    valid_addresses = functions_utils.filter_invalid_names(addresses)
+
+    f = open("output.txt", "w+")
+    for address in valid_addresses:
+        print f.write(idc.get_func_name(address) + "\n")
+
+    f.close()
+    idc.Exit(0)

@@ -20,9 +20,9 @@ def get_user_functions():
 def filter_invalid_names(addresses):
     valid_addresses = []
     for address in addresses:
-        name = get_demangled_name(address)
+        name = GetFunctionName(address)
 
-        if name is not None & re.match(r'[A-Za-z_]', name[0]):
+        if re.match(r'[A-Za-z_]', name[0]):
             valid_addresses.append(address)
 
     return valid_addresses
