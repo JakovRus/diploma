@@ -14,35 +14,23 @@ def get_user_functions():
             continue
         addresses.append(function)
 
+    addresses = filter_invalid_names(addresses)
     return addresses
 
 
 def filter_invalid_names(addresses):
     valid_addresses = []
     for address in addresses:
-        name = GetFunctionName(address)
-
-        if re.match(r'[A-Za-z_]', name[0]):
+        if is_user_function(address):
             valid_addresses.append(address)
 
     return valid_addresses
 
 
-def get_demangled_name(address):
-    return Demangle(get_func_name(address), GetLongPrm(idc.INF_LONG_DN))
-
-
-def is_valid_name(address):
-    name = Demangle(get_func_name(address), GetLongPrm(idc.INF_LONG_DN))
-    print name
-    # return name is not None & not not re.match(r'[A-Za-z_]', name[0])
-    return True
-
-
 def is_user_function(address):
     name = GetFunctionName(address)
 
-    is_valid = is_valid_name(address)
+    matches_pattern = re.match(r'\?[A-Za-z_][A-Za-z_0-9]*@@YAX', name)
     not_in_black_list = not is_in_black_list(name)
 
-    return is_valid & not_in_black_list
+    return matches_pattern and not_in_black_list

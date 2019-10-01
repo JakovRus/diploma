@@ -1,8 +1,9 @@
 import re
 
 blackListFunctions = [
-    r'^__',
-    r'^sub_\d*',
+    r'^\?__empty_global_delete',
+    r'^\?_RTC_',
+    r'^\?__scrt_',
 ]
 
 
