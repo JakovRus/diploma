@@ -16,20 +16,21 @@ def get_function_address(head):
     return str(idc.get_operand_value(head, 0))
 
 
-def get_jmp_functions(address):
-    jmp_functions = []
+def find_addresses_for_mnem(addresses, address, mnem):
     for head in idautils.Heads(get_start(address), get_end(address)):
-        if idc.GetMnem(head) == 'call':
-            jmp_functions.append(get_function_address(head))
+        if idc.GetMnem(head) == mnem:
+            addresses.append(get_function_address(head))
 
-    return jmp_functions
+
+def get_jmp_functions(address):
+    addresses = []
+    find_addresses_for_mnem(addresses, address, 'call')
+    return addresses
 
 
 def get_api_calls(address):
     calls = []
     for function in get_jmp_functions(address):
-        for head in idautils.Heads(get_start(function), get_end(function)):
-            if idc.GetMnem(head) == 'jmp':
-                calls.append(get_function_address(head))
+        find_addresses_for_mnem(calls, function, 'jmp')
 
     return calls
