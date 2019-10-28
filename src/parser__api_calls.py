@@ -2,6 +2,7 @@ import idaapi
 import idautils
 import idc
 
+from parser__black_list import is_in_black_list
 
 def get_start(address):
     print(address)
@@ -18,7 +19,8 @@ def get_function_address(head):
 
 def find_addresses_for_mnem(addresses, address, mnem):
     for head in idautils.Heads(get_start(address), get_end(address)):
-        if idc.GetMnem(head) == mnem:
+        name = idc.GetFunctionName(head)
+        if idc.GetMnem(head) == mnem and not is_in_black_list(name):
             addresses.append(get_function_address(head))
 
 
