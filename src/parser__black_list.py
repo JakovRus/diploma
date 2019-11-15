@@ -8,6 +8,7 @@ blackListFunctions = [
     r'.*CheckForDebuggerJustMyCode.*',
     r'.*__security_check_cookie.*',
     r'.*__global_delete.*',
+    r'.*__alldiv.*',
 ]
 
 
