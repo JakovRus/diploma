@@ -4,8 +4,8 @@ import idc
 
 from parser__black_list import is_in_black_list
 
+
 def get_start(address):
-    print(address)
     return idaapi.get_func(int(address)).startEA
 
 
@@ -33,6 +33,7 @@ def get_jmp_functions(address):
 def get_api_calls(address):
     calls = []
     for function in get_jmp_functions(address):
-        find_addresses_for_mnem(calls, function, 'jmp')
+        if idc.get_segm_name(int(function)) == '.text':
+            find_addresses_for_mnem(calls, function, 'jmp')
 
     return calls

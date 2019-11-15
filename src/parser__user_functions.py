@@ -29,7 +29,7 @@ def filter_invalid_names(addresses):
 def is_user_function(address):
     name = GetFunctionName(address)
 
-    matches_pattern = re.match(r'\?[A-Za-z_][A-Za-z_0-9]*@@YAX', name)
+    matches_pattern = re.match(r'\?[A-Za-z_][A-Za-z_0-9@]*@@[A-Z@]*', name)
     not_in_black_list = not is_in_black_list(name)
 
     return matches_pattern and not_in_black_list

@@ -2,11 +2,12 @@ import re
 
 blackListFunctions = [
     r'^\?__empty_global_delete',
-    r'^\?_RTC_',
-    r'.*__RTC_.*',
+    r'.*_RTC_.*',
     r'.*std.*',
-    r'^\?__scrt_',
+    r'.*__scrt_.*',
     r'.*CheckForDebuggerJustMyCode.*',
+    r'.*__security_check_cookie.*',
+    r'.*__global_delete.*',
 ]
 
 
