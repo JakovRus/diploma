@@ -13,8 +13,14 @@ blackListFunctions = [
 
 
 def is_in_black_list(name):
+    if name == 'j_@__CheckForDebuggerJustMyCode@4':
+        print('fff')
+
     for reg in blackListFunctions:
         if re.match(reg, name):
             return True
+
+    if name == 'j_@__CheckForDebuggerJustMyCode@4':
+        print('ffffffffff')
 
     return False

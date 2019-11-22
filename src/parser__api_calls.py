@@ -19,21 +19,17 @@ def get_function_address(head):
 
 def find_addresses_for_mnem(addresses, address, mnem):
     for head in idautils.Heads(get_start(address), get_end(address)):
-        name = idc.GetFunctionName(head)
-        if idc.GetMnem(head) == mnem and not is_in_black_list(name):
+        is_mnem = idc.GetMnem(head) == mnem
+        if not is_mnem:
+            continue
+
+        name = idc.GetFunctionName(int(get_function_address(head)))
+        not_in_black_list = not is_in_black_list(name)
+        if not_in_black_list:
             addresses.append(get_function_address(head))
 
 
-def get_jmp_functions(address):
+def get_api_calls(address):
     addresses = []
     find_addresses_for_mnem(addresses, address, 'call')
     return addresses
-
-
-def get_api_calls(address):
-    calls = []
-    for function in get_jmp_functions(address):
-        if idc.get_segm_name(int(function)) == '.text':
-            find_addresses_for_mnem(calls, function, 'jmp')
-
-    return calls

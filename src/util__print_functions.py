@@ -16,4 +16,3 @@ def print_functions():
         f.write("\n\n")
 
     f.close()
-    idc.Exit(0)
