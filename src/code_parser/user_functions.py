@@ -1,7 +1,7 @@
 from idaapi import *
 from idautils import *
 from idc import *
-from parser__black_list import *
+from black_list import *
 
 
 def get_user_functions():

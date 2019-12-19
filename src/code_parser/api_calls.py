@@ -2,7 +2,7 @@ import idaapi
 import idautils
 import idc
 
-from parser__black_list import is_in_black_list
+from black_list import is_in_black_list
 
 
 def get_start(address):

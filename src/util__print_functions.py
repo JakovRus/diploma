@@ -1,6 +1,6 @@
 import idc
-from parser__user_functions import get_user_functions
-from parser__api_calls import get_api_calls
+from code_parser.user_functions import get_user_functions
+from code_parser.api_calls import get_api_calls
 
 
 def print_functions():
