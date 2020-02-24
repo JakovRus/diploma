@@ -2,3 +2,4 @@ venv/**/*
 .idea/**/*
 *.exe*
 src/output.txt
+*.pyc
