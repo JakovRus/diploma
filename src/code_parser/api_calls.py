@@ -30,6 +30,9 @@ def find_addresses_for_mnem(addresses, address, mnem):
 
 
 def get_api_calls(address):
+    if idc.get_segm_name(int(address)) != '.text':
+        return []
+
     addresses = []
     find_addresses_for_mnem(addresses, address, 'call')
     return addresses

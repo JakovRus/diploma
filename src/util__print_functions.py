@@ -1,18 +1,15 @@
 import idc
-from code_parser.user_functions import get_user_functions
-from code_parser.api_calls import get_api_calls
+from code_parser.functions_array import get_functions_array
 
 
 def print_functions():
     idc.auto_wait()
 
-    addresses = get_user_functions()
+    addresses = get_functions_array()
 
     f = open("output.txt", "w+")
     for address in addresses:
-        f.write(idc.get_func_name(address) + ':' + str(address) + "\n")
-        for call in get_api_calls(address):
-            f.write(idc.get_func_name(int(call)) + ':' + str(call) + "\n")
-        f.write("\n\n")
+        f.write(idc.get_func_name(int(address)) + ':' + str(address) + "\n\n")
+    # f.write(str(len(addresses)))
 
     f.close()

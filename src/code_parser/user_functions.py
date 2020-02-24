@@ -11,6 +11,10 @@ def get_user_functions():
         flags = GetFunctionFlags(function)
         if flags & FUNC_LIB or flags & FUNC_THUNK:
             continue
+
+        if SegName(function) != '.text':
+            continue
+
         addresses.append(function)
 
     addresses = filter_invalid_names(addresses)
