@@ -1,8 +1,7 @@
 import idc
 from code_parser.functions_array import get_functions_array
 from code_parser.user_functions import get_user_functions
-from code_parser.api_calls import get_api_calls
-from k_gram.to_k_gram import to_k_gram
+from k_gram.get_function_k_grams import get_function_k_grams
 
 
 def print_functions():
@@ -23,8 +22,6 @@ def print_user_functions():
     addresses = get_user_functions()
 
     for address in addresses:
-        print(idc.get_func_name(int(address)) + ':' + str(address) + "\n")
-        calls = get_api_calls(address)
+        print(idc.get_func_name(int(address)) + ':' + str(address))
         print('k gramm: ')
-        print(to_k_gram(calls))
-        print('\n\n')
+        print(get_function_k_grams(address))

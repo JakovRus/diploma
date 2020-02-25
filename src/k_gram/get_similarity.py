@@ -1,5 +1,7 @@
+# p & q - k-grams
 def get_similarity(p, q):
     intersection = get_intersection(p, q)
+
     p_to_q = (float(len(intersection)) / len(p))
     q_to_p = (float(len(intersection)) / len(q))
 
