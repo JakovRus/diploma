@@ -1,5 +1,12 @@
+from src.k_gram.to_k_gram import k_gram_length
+from src.utils.flatten import flatten
+
+
 # p & q - k-grams
 def get_similarity(p, q):
+    if len(p) <= k_gram_length or len(q) <= k_gram_length:
+        return 100 if len(get_intersection(flatten(p), flatten(q))) > 0 else 0
+
     intersection = get_intersection(p, q)
 
     p_to_q = (float(len(intersection)) / len(p))

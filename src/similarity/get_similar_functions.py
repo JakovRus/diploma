@@ -10,7 +10,6 @@ def get_similar_functions(addr):
 
     for func in user_functions:
         func_k_grams = get_function_k_grams(func)
-        print(func_k_grams)
         similarity = get_similarity(k_grams, func_k_grams)
 
         if similarity > 50:
