@@ -1,16 +1,7 @@
-import idaapi
-import idautils
 import idc
 
 from black_list import is_in_black_list
-
-
-def get_start(address):
-    return idaapi.get_func(int(address)).startEA
-
-
-def get_end(address):
-    return idaapi.get_func(int(address)).endEA
+from src.utils.function_addresses import get_function_heads
 
 
 def get_function_address(head):
@@ -18,7 +9,7 @@ def get_function_address(head):
 
 
 def find_addresses_for_mnem(addresses, address, mnem):
-    for head in idautils.Heads(get_start(address), get_end(address)):
+    for head in get_function_heads(address):
         is_mnem = idc.GetMnem(head) == mnem
         if not is_mnem:
             continue
