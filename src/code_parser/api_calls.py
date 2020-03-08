@@ -2,10 +2,7 @@ import idc
 
 from black_list import is_in_black_list
 from src.utils.function_addresses import get_function_heads
-
-
-def get_function_address(head):
-    return str(idc.get_operand_value(head, 0))
+from src.utils.get_function_address import get_function_address
 
 
 def find_addresses_for_mnem(addresses, address, mnem):
