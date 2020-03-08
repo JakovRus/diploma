@@ -1,6 +1,6 @@
 import idc
 from function_addresses import get_function_heads
-from list_to_hex import list_to_hex
+from list_to_int import list_to_int
 
 
 def get_mnem_addresses(address, mnem_name):
@@ -12,5 +12,5 @@ def get_mnem_addresses(address, mnem_name):
         if mnem == mnem_name:
             addresses.append(head)
 
-    return list_to_hex(addresses)
+    return list_to_int(addresses)
 
