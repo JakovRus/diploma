@@ -1,7 +1,8 @@
 import idc
 from code_parser.functions_array import get_functions_array
 from code_parser.user_functions import get_user_functions
-from get_checked_calls import get_checked_calls
+from src.missing_checks.get_checked_calls import get_checked_calls
+from src.missing_checks.get_missing_checks import get_missing_checks
 from src.utils.get_function_address import get_function_address
 
 
@@ -23,15 +24,19 @@ def print_user_functions():
     addresses = get_user_functions()
 
     for address in addresses:
-        print('*******************')
-        print(idc.get_func_name(int(address)) + ':' + str(address))
-        print('------------------')
-        calls = get_checked_calls(address)
+        calls = get_missing_checks(address)
+
+        if len(calls):
+            print('*******************')
+            print(idc.get_func_name(int(address)) + ':' + str(address))
+            print('------------------')
+
         for call in calls:
             function_address = get_function_address(call)
             print(idc.get_func_name(int(function_address)) + ':' + str(function_address))
 
-        print('*******************')
+        if len(calls):
+            print('*******************')
 
     # similar = get_similar_functions(addresses[0])
     #
