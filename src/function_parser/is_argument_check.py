@@ -5,6 +5,7 @@ import ida_funcs
 from get_call_arguments import get_call_arguments
 from src.utils.get_heads_to_address import get_heads_to_address
 from get_args_addresses import get_args_addresses
+from src.utils.is_number import is_number
 
 
 def is_argument(opnd, arguments):
@@ -41,6 +42,7 @@ def check_eax(addr, args):
 
 
 def check_operand(opnd, call_arguments, heads):
+    print('OPERAND: ', opnd)
     if is_argument(opnd, call_arguments):
         return True
 
@@ -54,9 +56,10 @@ def check_operand(opnd, call_arguments, heads):
         if opnd != idc.GetOpnd(head, 0):
             continue
 
-        opnd = idc.GetOpnd(head, 1)
-        if is_argument(opnd, call_arguments):
-            return True
+        if not is_number(idc.GetOpnd(head, 1)):
+            opnd = idc.GetOpnd(head, 1)
+            if is_argument(opnd, call_arguments):
+                return True
 
     return False
 
