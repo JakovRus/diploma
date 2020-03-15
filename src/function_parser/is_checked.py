@@ -1,12 +1,17 @@
-from get_cmp_addresses import get_cmp_addresses
+from checks import get_cmp_addresses, get_test_addresses
 from is_argument_check import is_argument_check
 
 
 def is_checked(call_address):
-    checks = get_cmp_addresses(call_address)
+    cmps = get_cmp_addresses(call_address)
+    tests = get_test_addresses(call_address)
 
-    for _cmp in checks:
+    for _cmp in cmps:
         if is_argument_check(_cmp, call_address):
+            return True
+
+    for test in tests:
+        if is_argument_check(test, call_address):
             return True
 
     return False

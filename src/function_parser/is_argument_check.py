@@ -41,13 +41,24 @@ def check_eax(addr, args):
     return False
 
 
+def is_return_value(opnd):
+    return re.match(r'r|e?ax', opnd) or opnd == 'al'
+
+
+def check_next_opnd(head, call_arguments):
+    opnd = idc.GetOpnd(head, 1)
+    prev_head = idc.PrevHead(head)
+    heads = get_heads_to_address(prev_head)
+
+    return  check_operand(opnd, call_arguments, heads)
+
+
 def check_operand(opnd, call_arguments, heads):
-    print('OPERAND: ', opnd)
     if is_argument(opnd, call_arguments):
         return True
 
     for head in heads:
-        if re.match(r'r|e?ax', opnd) and idc.GetMnem(head) == 'call' and ida_funcs.func_does_return(head):
+        if is_return_value(opnd) and idc.GetMnem(head) == 'call' and ida_funcs.func_does_return(head):
             return check_eax(head, call_arguments)
 
         if idc.GetMnem(head) == 'call' and is_overwritten(head, opnd):
@@ -56,18 +67,19 @@ def check_operand(opnd, call_arguments, heads):
         if opnd != idc.GetOpnd(head, 0):
             continue
 
-        if not is_number(idc.GetOpnd(head, 1)):
-            opnd = idc.GetOpnd(head, 1)
-            if is_argument(opnd, call_arguments):
-                return True
+        if not is_number(idc.GetOpnd(head, 1)) and check_next_opnd(head, call_arguments):
+            return True
+
+        if is_argument(opnd, call_arguments):
+            return True
 
     return False
 
 
-def is_argument_check(_cmp, call):
+def is_argument_check(check_address, call):
     call_arguments = get_call_arguments(call)
-    opnd1 = idc.GetOpnd(_cmp, 0)
-    opnd2 = idc.GetOpnd(_cmp, 1)
-    heads = get_heads_to_address(_cmp)
+    opnd1 = idc.GetOpnd(check_address, 0)
+    opnd2 = idc.GetOpnd(check_address, 1)
+    heads = get_heads_to_address(check_address)
 
     return check_operand(opnd1, call_arguments, heads) or check_operand(opnd2, call_arguments, heads)
