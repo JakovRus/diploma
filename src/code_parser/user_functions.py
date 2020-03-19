@@ -17,7 +17,7 @@ def get_user_functions():
 
         addresses.append(function)
 
-    addresses = filter_invalid_names(addresses)
+    # addresses = filter_invalid_names(addresses)
     return addresses
 
 

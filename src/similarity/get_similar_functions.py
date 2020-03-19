@@ -12,7 +12,7 @@ def get_similar_functions(addr):
         func_k_grams = get_function_k_grams(func)
         similarity = get_similarity(k_grams, func_k_grams)
 
-        if similarity > 50:
+        if similarity > 75:
             similar_functions.append(func)
 
     return similar_functions

@@ -1,6 +1,8 @@
 import sys
 import os
 
+from src.missing_checks.get_checked_calls import get_checked_calls
+
 sys.path.append(os.getcwd())
 
 import idc
@@ -14,9 +16,13 @@ def find_missing_checks():
     idc.auto_wait()
 
     addresses = get_user_functions()
+    checked_calls = {}
 
     for address in addresses:
-        calls = get_missing_checks(address)
+        checked_calls[address] = get_checked_calls(address)
+
+    for address in addresses:
+        calls = get_missing_checks(address, checked_calls)
 
         if len(calls):
             print('*******************')
