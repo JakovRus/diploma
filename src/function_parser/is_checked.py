@@ -7,10 +7,16 @@ def is_checked(call_address):
     tests = get_test_addresses(call_address)
 
     for _cmp in cmps:
+        if _cmp > call_address:
+            continue
+
         if is_argument_check(_cmp, call_address):
             return True
 
     for test in tests:
+        if test > call_address:
+            continue
+
         if is_argument_check(test, call_address):
             return True
 

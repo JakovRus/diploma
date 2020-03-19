@@ -1,4 +1,5 @@
 import re
+
 import idc
 import ida_funcs
 
@@ -17,11 +18,11 @@ def is_argument(opnd, arguments):
     return is_arg
 
 
-def is_overwritten(call, opnd):
+def is_used(call, opnd):
     addresses = get_args_addresses(call)
 
     for address in addresses:
-        if idc.GetOpnd(address, 0) == opnd:
+        if idc.GetOpnd(address, 0) == opnd or idc.GetOpnd(address, 1) == opnd:
             return True
 
     return False
@@ -37,7 +38,7 @@ def check_eax(addr, args):
     for flag in is_arg:
         if flag:
             return True
-    
+
     return False
 
 
@@ -50,7 +51,11 @@ def check_next_opnd(head, call_arguments):
     prev_head = idc.PrevHead(head)
     heads = get_heads_to_address(prev_head)
 
-    return  check_operand(opnd, call_arguments, heads)
+    return check_operand(opnd, call_arguments, heads)
+
+
+def should_check_second_opnd(head):
+    return re.match(r'mov', idc.GetMnem(head)) or re.match(r'lea', idc.GetMnem(head))
 
 
 def check_operand(opnd, call_arguments, heads):
@@ -61,13 +66,18 @@ def check_operand(opnd, call_arguments, heads):
         if is_return_value(opnd) and idc.GetMnem(head) == 'call' and ida_funcs.func_does_return(head):
             return check_eax(head, call_arguments)
 
-        if idc.GetMnem(head) == 'call' and is_overwritten(head, opnd):
+        if idc.GetMnem(head) == 'call' and is_used(head, opnd):
             return False
 
         if opnd != idc.GetOpnd(head, 0):
             continue
 
-        if not is_number(idc.GetOpnd(head, 1)) and check_next_opnd(head, call_arguments):
+        if should_check_second_opnd(head):
+            if is_number(idc.GetOpnd(head, 1)):
+                return is_argument(idc.GetOpnd(head, 1), call_arguments)
+            opnd = idc.GetOpnd(head, 1)
+
+        elif (not is_number(idc.GetOpnd(head, 1))) and check_next_opnd(head, call_arguments):
             return True
 
         if is_argument(opnd, call_arguments):
@@ -77,6 +87,9 @@ def check_operand(opnd, call_arguments, heads):
 
 
 def is_argument_check(check_address, call):
+    if check_address > call:
+        return False
+
     call_arguments = get_call_arguments(call)
     opnd1 = idc.GetOpnd(check_address, 0)
     opnd2 = idc.GetOpnd(check_address, 1)
