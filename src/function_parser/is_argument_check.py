@@ -58,11 +58,18 @@ def should_check_second_opnd(head):
     return re.match(r'mov', idc.GetMnem(head)) or re.match(r'lea', idc.GetMnem(head))
 
 
+def is_jump(head):
+    return re.match(r'j', idc.GetMnem(head))
+
+
 def check_operand(opnd, call_arguments, heads):
     if is_argument(opnd, call_arguments):
         return True
 
     for head in heads:
+        if is_jump(head):
+            return False
+
         if is_return_value(opnd) and idc.GetMnem(head) == 'call' and ida_funcs.func_does_return(head):
             return check_eax(head, call_arguments)
 
