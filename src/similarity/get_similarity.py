@@ -2,12 +2,16 @@ from src.k_gram.to_k_gram import k_gram_length
 from src.utils.flatten import flatten
 
 
+def k_gram_to_list(k_gram):
+    return [str(item) for item in flatten(k_gram)]
+
+
 # p & q - k-grams
 def get_similarity(p, q):
     if len(p) <= k_gram_length or len(q) <= k_gram_length:
-        return 100 if len(get_intersection(flatten(p), flatten(q))) > 0 else 0
-
-    intersection = get_intersection(p, q)
+        intersection = get_intersection(k_gram_to_list(p), k_gram_to_list(q))
+    else:
+        intersection = get_intersection(p, q)
 
     p_to_q = (float(len(intersection)) / len(p))
     q_to_p = (float(len(intersection)) / len(q))
@@ -21,7 +25,6 @@ def get_separator():
 
 def list_to_string(_list):
     separator = get_separator()
-
     return separator.join(str(item) for item in _list)
 
 
@@ -36,6 +39,10 @@ def k_grams_to_string(k_grams):
 
 def string_to_array(_str):
     separator = get_separator()
+
+    if not _str:
+        return []
+
     split = _str.split(separator)
 
     return [int(item) for item in split]
@@ -52,4 +59,3 @@ def get_intersection(p, q):
         intersection.append(string_to_array(string_k_gram))
 
     return intersection
-

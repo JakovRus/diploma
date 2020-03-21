@@ -24,19 +24,25 @@ def get_counted_checked_calls(checked_calls, similar_functions):
     return Counter(counted_checked_calls)
 
 
+def get_using_functions(similar_functions, checked_calls, call):
+    return list(filter(lambda func: call in checked_calls[func], similar_functions))
+
+
 def get_missing_checks(func_address, checked_calls):
     unchecked_calls = get_unchecked_calls(func_address, checked_calls)
     similar_functions = get_similar_functions(func_address)
-    similar_functions_length = float(len(similar_functions))
 
-    if not similar_functions_length:
+    if not len(similar_functions):
         return []
 
     counted_checked_calls = get_counted_checked_calls(checked_calls, similar_functions)
     missing_checks = []
 
     for call in unchecked_calls:
-        percentage = counted_checked_calls[call] / similar_functions_length
+        using_functions = get_using_functions(similar_functions, checked_calls, call)
+        length = float(len(using_functions))
+        percentage = counted_checked_calls[call] / length if length else 0
+
         if percentage >= 0.5:
             missing_checks.append(call)
 
