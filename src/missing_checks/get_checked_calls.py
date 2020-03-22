@@ -1,10 +1,8 @@
-from src.function_parser.get_calls_addresses import get_calls_addresses
 from src.function_parser.is_checked import is_checked
 from src.utils.get_function_address import get_function_address
 
 
-def get_checked_calls(address):
-    calls_addresses = get_calls_addresses(address)
+def get_checked_calls(calls_addresses):
     checked_calls = []
 
     for address in calls_addresses:
